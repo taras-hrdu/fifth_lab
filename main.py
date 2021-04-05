@@ -10,12 +10,12 @@ def cause_found():
             if re.search(pattern, line):
                 results.append(line)
                 caused_found = True
-
             elif caused_found and re.search(r'}', line):
                 caused_found = False
                 results[-1] += line
             elif caused_found:
                 results[-1] += line
+                print("Not founded")
         return results
 
 
