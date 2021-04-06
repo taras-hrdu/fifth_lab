@@ -4,38 +4,30 @@ import re
 def cause_found():
     results = []
     caused_found = False
+    war_found = False
+    found = ""
     with open('server.log') as log_file:
         pattern = r'Caused by'
         for line in log_file.readlines():
-            if re.search(pattern, line):
-                results.append(line)
-                caused_found = True
-            elif caused_found and re.search(r'}', line):
+            if re.search(r'}', line):
+                if caused_found and war_found:
+                    results.append(found)
+                    war_found = False
                 caused_found = False
-                results[-1] += line
-            elif caused_found:
-                results[-1] += line
-                print("Not founded")
+            if caused_found:
+                if re.search(r'\.war\\', line):
+                    found += line
+                    war_found = True
+            if re.search(pattern, line):
+                found = line
+                caused_found = True  
         return results
 
 
-def war_found(array):
-    results = []
-    pattern = r'\.war\\'
-    for element in array:
-        if re.search(pattern, element):
-            results.append(element)
-    return results
-
-
 def main():
-    output = cause_found()
-    count = 0
-    found_lines = war_found(output)
-    for element in found_lines:
-        print(element)
-        count += 1
-    print(count)
+    found_lines = cause_found()
+    print(found_lines)
+    print(len(found_lines))
 
 
 if __name__ == '__main__':
