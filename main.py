@@ -14,10 +14,9 @@ def cause_found():
                     results.append(found)
                     war_found = False
                 caused_found = False
-            if caused_found:
-                if re.search(r'\.war\\', line):
-                    found += line
-                    war_found = True
+            if caused_found and re.search(r'\.war\\', line):
+                found += line
+                war_found = True
             if re.search(pattern, line):
                 found = line
                 caused_found = True  
@@ -26,7 +25,8 @@ def cause_found():
 
 def main():
     found_lines = cause_found()
-    print(found_lines)
+    for element in found_lines:
+        print(element)
     print(len(found_lines))
 
 
